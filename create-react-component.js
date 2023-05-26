@@ -49,15 +49,13 @@ if (!title) {
   throw new Error("Please enter a name for the component.")
 }
 
-
-
 //Checking the current directory to make sure it is a properly setup react project
 process.stdout.write('Checking package.json... ');
 if (!fs.existsSync('package.json')) {
   throw new Error('package.json not found on the current working directory. You need to be in the root directory of your react project.');
 } else {
-  const pkge = JSON.parse(fs.readFileSync('package.json')).dependencies;
-  if (pkge.react === undefined) {
+  const pkges = JSON.parse(fs.readFileSync('package.json')).dependencies;
+  if (pkges.react === undefined) {
     throw new Error('Did not find react in the dependencies of your project. Are you sure react is properly set up ?');
   }
 } 
@@ -65,13 +63,21 @@ console.log('OK');
 
 //Checking file tree
 process.stdout.write('Checking directories... ');
-if (!fs.existsSync(dirPath)) {
-  fs.mkdirSync(dirPath);
-  process.stdout.write(`Created ${compType} directory`)
-} else if (fs.existsSync(compPath)) {
+if (fs.existsSync(compPath)) {
   throw new Error('This component already exists !');
 }
 console.log('OK');
+
+//Checking if parent component exists
+if (!fs.existsSync(parentPath)) {
+  throw new Error(`Parent component ${parent} not found at ${parentPath}`)
+}
+
+//Creating components/pages directory
+if (!fs.existsSync(dirPath)) {
+  fs.mkdirSync(dirPath);
+  process.stdout.write(`Created ${compType} directory`)
+}
 
 //Creating component directory
 fs.mkdirSync(compPath);
@@ -92,9 +98,6 @@ if (parent) {
     parentPath = 'src/App.jsx';
   } else {
     parentPath =  `src/${fs.existsSync(parentCompPath) ? 'components' : 'pages'}/${parent}/index.jsx`;
-    if (!fs.existsSync(parentPath)) {
-      throw new Error(`Parent component ${parent} not found at ${parentPath}`)
-    }
   }
 
   const componentImport = `import ${title} from './${title}';`
