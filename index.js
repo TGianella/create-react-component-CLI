@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //Module imports
 const fs = require('fs');
 const yargs = require('yargs/yargs')
@@ -22,6 +24,14 @@ const compType = page ? 'pages' : 'components'
 const dirPath = `src/${compType}`;
 const compPath = dirPath + `/${title}`;
 const parentCompPath = `src/components/${parent}/index.jsx`
+if (parent) {
+  let parentPath
+  if (parent === 'App') {
+    parentPath = 'src/App.jsx';
+  } else {
+    parentPath =  `src/${fs.existsSync(parentCompPath) ? 'components' : 'pages'}/${parent}/index.jsx`;
+  }
+}
 
 //File templates
 const propsString = props ? `{ ${props} }` : ''
@@ -40,7 +50,6 @@ export default ${title};
 const SCSSdata = `.${rawTitle} {
   outline: solid red;
 }`
-
 
 console.log(argv);
 console.log("parent:", parent);
@@ -69,7 +78,7 @@ if (fs.existsSync(compPath)) {
 console.log('OK');
 
 //Checking if parent component exists
-if (!fs.existsSync(parentPath)) {
+if (parent && !fs.existsSync(parentPath)) {
   throw new Error(`Parent component ${parent} not found at ${parentPath}`)
 }
 
@@ -93,13 +102,6 @@ console.log('Created style.scss');
 
 // Creating import into parent component
 if (parent) {
-  let parentPath
-  if (parent === 'App') {
-    parentPath = 'src/App.jsx';
-  } else {
-    parentPath =  `src/${fs.existsSync(parentCompPath) ? 'components' : 'pages'}/${parent}/index.jsx`;
-  }
-
   const componentImport = `import ${title} from './${title}';`
   const parentData = fs.readFileSync(parentPath).toString().split("\n");
   const reactImport = parentData.shift();

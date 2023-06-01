@@ -1,4 +1,22 @@
 {
+  "name": "create-react-component-CLI",
+  "version": "1.0.0",
+  "author": "Théo Gianella",
+  "description": "CLI to easily create react components",
+  "keywords": [
+    "CLI",
+    "React",
+    "Component"
+  ],
+  "main": "./index.js",
+  "license": "MIT",
+  "bin": {
+    "newcomp": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github:TGianella/create-react-component-CLI"
+  },
   "devDependencies": {
     "yargs": "^17.7.2"
   }
