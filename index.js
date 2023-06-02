@@ -1,35 +1,65 @@
 #!/usr/bin/env node
 
 //Module imports
+const config = require('./config.json')
 const fs = require('fs');
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 
 //Command line arguments parsing
 const argv = yargs(hideBin(process.argv))
-  .array('props')
-  .boolean('page')
-  .default('page', false)
+  .option('pr', {
+    alias: 'props',
+    array: true,
+    describe: 'Any number of props you want included in the new component'
+  })
+  .option('pa', {
+    alias: 'path',
+    describe: 'Specifies the base path for creating the component if you want to override the default value (./src)'
+  })
+  .option('pg', {
+    alias: 'page',
+    boolean: true,
+    default: false,
+    describe: 'Tells if the component to be created is a page'
+  })
   .default('parent', null)
+  .option('prt', {
+    alias: 'parent',
+    describe: 'Specifies the parent component or page'
+  })
+  .check((argv) => {
+    if (argv._.length === 0) {
+      throw new Error("Please enter a name for the component")
+    } else {
+      return true
+    }
+  })
   .argv
 
-// Arguments : component title, parent=null, --props, --page
+// Arguments : component title, parent=null, path=null, --props, --page
+//
+// Creates by default the component in './src/components, creates the component folder if it does not exist'
 
-const { page, props, parent, _ } = argv;
+
+const { page, props, parent, path, _ } = argv;
 const [rawTitle] = _;
 const title = rawTitle[0].toUpperCase() + rawTitle.slice(1);
 const compType = page ? 'pages' : 'components'
 
 //File paths
-const dirPath = `src/${compType}`;
+
+const basePath = path || config.path || 'src'
+const dirPath = `${basePath}/${compType}`;
 const compPath = dirPath + `/${title}`;
-const parentCompPath = `src/components/${parent}/index.jsx`
+const parentCompPath = `${basePath}/components/${parent}/index.jsx` // used only to check later if parent is a component or a page
+const parentIsComponent = fs.existsSync(parentCompPath);
 if (parent) {
   let parentPath
   if (parent === 'App') {
-    parentPath = 'src/App.jsx';
+    parentPath = `${basePath}/App.jsx`;
   } else {
-    parentPath =  `src/${fs.existsSync(parentCompPath) ? 'components' : 'pages'}/${parent}/index.jsx`;
+    parentPath =  `${basePath}/${parentIsComponent ? 'components' : 'pages'}/${parent}/index.jsx`;
   }
 }
 
@@ -53,10 +83,6 @@ const SCSSdata = `.${rawTitle} {
 
 console.log(argv);
 console.log("parent:", parent);
-
-if (!title) {
-  throw new Error("Please enter a name for the component.")
-}
 
 //Checking the current directory to make sure it is a properly setup react project
 process.stdout.write('Checking package.json... ');
@@ -85,7 +111,7 @@ if (parent && !fs.existsSync(parentPath)) {
 //Creating components/pages directory
 if (!fs.existsSync(dirPath)) {
   fs.mkdirSync(dirPath);
-  process.stdout.write(`Created ${compType} directory`)
+  console.log(`Created ${compType} directory`)
 }
 
 //Creating component directory
