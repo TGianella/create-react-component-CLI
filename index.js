@@ -81,8 +81,8 @@ const SCSSdata = `.${rawTitle} {
   outline: solid red;
 }`
 
-console.log(argv);
-console.log("parent:", parent);
+// console.log(argv);
+// console.log("parent:", parent);
 
 //Checking the current directory to make sure it is a properly setup react project
 process.stdout.write('Checking package.json... ');
