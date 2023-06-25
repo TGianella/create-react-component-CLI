@@ -1,5 +1,5 @@
 {
-  "name": "@tgianella/create-react-component-CLI",
+  "name": "@tgianella/create-react-component-cli",
   "version": "1.0.0",
   "author": "Théo Gianella",
   "description": "CLI to easily create react components",
