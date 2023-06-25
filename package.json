@@ -1,6 +1,6 @@
 {
   "name": "@tgianella/create-react-component-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Théo Gianella",
   "description": "CLI to easily create react components",
   "keywords": [
