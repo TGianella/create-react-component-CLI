@@ -17,8 +17,15 @@ Exemple : `npx newcomp component_name --props prop1 prop2 --path ./src/pages --p
 
 This creates a component_name component at src/pages with props prop1 and prop2 and already imported into parent_component.
 
+You can edit the base file path used for creating components in config.json.
+
 ## Common issues
 
 - This package checks that react is properly installed by reading package.json. Using it outside of a react project is going to throw an error.
 - Your project needs to have a 'src' directory at the root if you dont specify a path with `--path`.
 
+## TODO
+
+- Testing
+- Heavy refactoring, splitting up code into functions and modules.
+- Continue implementing options on the command line to unopinionate this package
