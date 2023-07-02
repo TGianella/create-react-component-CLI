@@ -3,6 +3,8 @@ Ever dreamt of creating your react components on the command line ? That dream i
 
 Right now it is a VERY opinionated tool as it was first created for a group project, accustomed to our own specific filepath conventions, but I'm working on making it more universal and customizable.
 
+Feel free to open an issue if you're interested with contributing to this project ! 
+
 ## Installation
 
 Now officially published to NPM ! :tada:
