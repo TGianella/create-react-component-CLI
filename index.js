@@ -37,40 +37,32 @@ const argv = yargs(hideBin(process.argv))
   })
   .argv
 
-// Arguments : component title, parent=null, path=null, --props, --page
-//
-// Creates by default the component in './src/components, creates the component folder if it does not exist'
-
-console.log(argv)
-
-
 const { page, props, parent, path, _ } = argv;
 const [rawTitle] = _;
 const title = rawTitle[0].toUpperCase() + rawTitle.slice(1);
 const compType = page ? 'pages' : 'components'
 
 //File paths
-
 const basePath = path || config.path || 'src'
 const dirPath = `${basePath}/${compType}`;
 const compPath = dirPath + `/${title}`;
-const parentCompPath = `${basePath}/components/${parent}/index.jsx` // used only to check later if parent is a component or a page
-const parentIsComponent = fs.existsSync(parentCompPath);
-if (parent) {
-  console.log("parent = true")
-  if (parent === 'App') {
-    const parentPath = `${basePath}/App.jsx`;
-  } else {
-    const parentPath =  `${basePath}/${parentIsComponent ? 'components' : 'pages'}/${parent}/index.jsx`;
+const parentPath = getParentPath(parent, basePath)
+
+function getParentPath(parent, basePath) {
+  const parentIsComponent = fs.existsSync(`${basePath}/components/${parent}/index.jsx`);
+
+  if (parent) {
+    if (parent === 'App') {
+      return `${basePath}/App.jsx`;
+    } else {
+      return `${basePath}/${parentIsComponent ? 'components' : 'pages'}/${parent}/index.jsx`;
+    }
   }
 }
 
-console.log("Parentpath : ", parentPath)
-
 //File templates
-const propsString = props ? `{ ${props} }` : ''
-const JSXdata = `import React from 'react';
-import './style.scss';
+const propsString = props ? `{ ${props.join(', ')} }` : ''
+const JSXdata = `import './style.scss';
 
 function ${title}(${propsString}) {
 
@@ -84,9 +76,6 @@ export default ${title};
 const SCSSdata = `.${rawTitle} {
   outline: solid red;
 }`
-
-// console.log(argv);
-// console.log("parent:", parent);
 
 //Checking the current directory to make sure it is a properly setup react project
 process.stdout.write('Checking package.json... ');
@@ -134,8 +123,7 @@ console.log('Created style.scss');
 if (parent) {
   const componentImport = `import ${title} from './${title}';`
   const parentData = fs.readFileSync(parentPath).toString().split("\n");
-  const reactImport = parentData.shift();
-  const newParentData = [reactImport, componentImport, ...parentData].join("\n");
+  const newParentData = [componentImport, ...parentData].join("\n");
   fs.writeFileSync(parentPath, newParentData);
   console.log(`Imported component ${title} into parent component ${parent}.`);
 }
