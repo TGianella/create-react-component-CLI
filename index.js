@@ -57,6 +57,7 @@ const compPath = dirPath + `/${title}`;
 const parentCompPath = `${basePath}/components/${parent}/index.jsx` // used only to check later if parent is a component or a page
 const parentIsComponent = fs.existsSync(parentCompPath);
 if (parent) {
+  console.log("parent = true")
   let parentPath
   if (parent === 'App') {
     parentPath = `${basePath}/App.jsx`;
@@ -64,6 +65,8 @@ if (parent) {
     parentPath =  `${basePath}/${parentIsComponent ? 'components' : 'pages'}/${parent}/index.jsx`;
   }
 }
+
+console.log("Parentpath : ", parentPath)
 
 //File templates
 const propsString = props ? `{ ${props} }` : ''
