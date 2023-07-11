@@ -58,11 +58,10 @@ const parentCompPath = `${basePath}/components/${parent}/index.jsx` // used only
 const parentIsComponent = fs.existsSync(parentCompPath);
 if (parent) {
   console.log("parent = true")
-  let parentPath
   if (parent === 'App') {
-    parentPath = `${basePath}/App.jsx`;
+    const parentPath = `${basePath}/App.jsx`;
   } else {
-    parentPath =  `${basePath}/${parentIsComponent ? 'components' : 'pages'}/${parent}/index.jsx`;
+    const parentPath =  `${basePath}/${parentIsComponent ? 'components' : 'pages'}/${parent}/index.jsx`;
   }
 }
 
