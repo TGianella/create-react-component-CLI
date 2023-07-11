@@ -41,6 +41,8 @@ const argv = yargs(hideBin(process.argv))
 //
 // Creates by default the component in './src/components, creates the component folder if it does not exist'
 
+console.log(argv)
+
 
 const { page, props, parent, path, _ } = argv;
 const [rawTitle] = _;
