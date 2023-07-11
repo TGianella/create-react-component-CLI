@@ -1,4 +1,11 @@
 # create-react-component-CLI
+
+<p>
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=white&style=for-the-badge" />
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge" />
+  <img alt="npm" src="https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white&style=for-the-badge" />
+</p>
+
 Ever dreamt of creating your react components on the command line ? That dream is coming true thanks to this incredible new package.
 
 Right now it is a VERY opinionated tool as it was first created for a group project, accustomed to our own specific filepath conventions, but I'm working on making it more universal and customizable.
